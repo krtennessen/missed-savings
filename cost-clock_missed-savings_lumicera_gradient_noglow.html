@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Missed Savings Opportunity Since January 1, 2026</title>
+  <style>
+    :root{
+      --lumicera-blue: #0F6CBD;
+      --lumicera-teal: #1FB6B2;
+      --lumicera-bg: #071C2C;
+      --lumicera-text: #EAF4FB;
+    }
+
+    body{
+      margin:0;
+      display:grid;
+      place-items:center;
+      min-height:100vh;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(31,182,178,.18), transparent 60%),
+        radial-gradient(900px 700px at 80% 90%, rgba(15,108,189,.20), transparent 60%),
+        var(--lumicera-bg);
+      color: var(--lumicera-text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    }
+
+    .container{ text-align:center; }
+
+    .title{
+      font-size:28px;
+      font-weight:600;
+      margin-bottom:22px;
+      letter-spacing:.3px;
+    }
+
+    .amount{
+      font-size:64px;
+      font-weight:800;
+      font-variant-numeric: tabular-nums;
+      color: var(--lumicera-blue);
+      text-shadow: none; /* explicitly no glow */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">Missed Savings Opportunity Since January 1, 2026</div>
+    <div class="amount" id="amount">$82,131.48</div>
+  </div>
+
+<script>
+  // Locked start date: today at 00:00:00 (local time)
+  const START_DATE = '2026-03-19';
+  const START_AMOUNT = 82131.48;
+  const MONTHLY_COST = 33000;
+
+  // Average calendar month length
+  const SECONDS_PER_MONTH = (365.25 / 12) * 24 * 60 * 60;
+  const RATE_PER_SECOND = MONTHLY_COST / SECONDS_PER_MONTH;
+
+  const fmt = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  const startTime = new Date(START_DATE + 'T00:00:00').getTime();
+
+  function render() {
+    const elapsedSeconds = (Date.now() - startTime) / 1000;
+    const value = START_AMOUNT + Math.max(0, elapsedSeconds) * RATE_PER_SECOND;
+    document.getElementById('amount').textContent = fmt.format(value);
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+</script>
+</body>
+</html>
